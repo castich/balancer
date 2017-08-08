@@ -9,6 +9,7 @@ public class Ball {
 	public Ball(int index, int weight) {
 		this.index = index;
 		this.weight = weight;
+		this.stateChanged = false;
 	}
 
 	public int getIndex() {

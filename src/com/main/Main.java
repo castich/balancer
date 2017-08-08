@@ -7,7 +7,9 @@ public class Main {
 	static boolean balanced = false;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int oddIndex = 9;
+		int oddIndex = 5;
+		BallGroup aNew = new BallGroup("aNew");
+		BallGroup bNew = new BallGroup("bNew");
 		
 		groupA.init();
 		groupB.init();
@@ -19,12 +21,56 @@ public class Main {
 		System.out.println(balanced);
 		if(!balanced) {
 			
+			Ball aOut = groupA.getBalls()[0]; //Remove ball 1 from group A
+			Ball bOut = groupB.getBalls()[0]; //Remove ball 5 from group B
+			aNew.setBalls(new Ball[3]);
+			bNew.setBalls(new Ball[3]);
+			
+			//Switch 2 last balls from Group A and B, so that
+			//Group A will be 2, 7, 8 and Group B will be 6, 3, 4
+			aNew.getBalls()[0]=groupA.getBalls()[1];
+			aNew.getBalls()[1]=groupB.getBalls()[2];
+			aNew.getBalls()[2]=groupB.getBalls()[3];
+			bNew.getBalls()[0]=groupB.getBalls()[1];
+			bNew.getBalls()[1]=groupA.getBalls()[2];
+			bNew.getBalls()[2]=groupA.getBalls()[3];
+			
+			//A : 2, 7, 8
+			//B : 6, 3, 4
+			
+			//2nd scale in this scenario
+			balanced = balance(aNew, bNew, 3);
+			
+			if(balanced) {
+				// Will assume the odd ball is either Ball 1 or Ball 5
+				// Will balance Ball 1 against a normal ball, and will sit Ball 5 out.
+				// In this example, I'll use normal Ball 9.
+				aNew.setBalls(new Ball[1]);
+				bNew.setBalls(new Ball[1]);
+				aNew.getBalls()[0] = aOut;
+				bNew.getBalls()[0] = groupC.getBalls()[0]; //Ball 9
+
+				// 3rd scale in this scenario
+				balanced = balance(aNew, bNew, 1);
+				if(balanced) {
+					//Odd ball is Ball 5 if Ball 1 balances with Ball 9
+					System.out.println("Odd ball is Ball "+ bOut.getIndex()+" weighting "+bOut.getWeight()+".");
+				}
+				
+				else {
+					//Odd ball is Ball 1 if it doesn't balance with normal Ball 9
+					System.out.println("Odd ball is Ball "+ aNew.getBalls()[0].getIndex()+" weighing "+aNew.getBalls()[0].getWeight());
+				}
+			}
+			
+			else {
+				
+			}
+			
 		}
 		
 		else {
 			//Will assume odd ball is in Group C if A and B balanced.
-			BallGroup aNew = new BallGroup("aNew");
-			BallGroup bNew = new BallGroup("bNew");
 			aNew.setBalls(new Ball[1]);
 			bNew.setBalls(new Ball[1]);
 
@@ -43,11 +89,11 @@ public class Main {
 				//Third scale, if 2nd scale in this scenario balanced.
 				if(balanced) {
 //					can assume odd ball is ball 12, because 9, 10, and 11 balanced.
-					System.out.println("Odd ball is "+ groupC.getBalls()[3].getIndex()+" weighting "+groupC.getBalls()[3].getWeight()+".");
+					System.out.println("Odd ball is Ball "+ groupC.getBalls()[3].getIndex()+" weighing "+groupC.getBalls()[3].getWeight()+".");
 				}
 				else {
 //					can assume odd ball is ball 11, because it never did not balance with 9 that already balanced earlier with another ball.
-					System.out.println("Odd ball is "+ groupC.getBalls()[2].getIndex()+" weighing "+groupC.getBalls()[2].getWeight());
+					System.out.println("Odd ball is Ball "+ groupC.getBalls()[2].getIndex()+" weighing "+groupC.getBalls()[2].getWeight());
 				}
 			}
 			
@@ -62,11 +108,11 @@ public class Main {
 					System.out.println(aNew.getBalls()[0].getWeight());
 					System.out.println(bNew.getBalls()[0].getWeight());
 					//Can assume odd ball is 10, because 9 balanced with another ball.
-					System.out.println("Odd ball is "+ groupC.getBalls()[1].getIndex()+" weighing "+groupC.getBalls()[1].getWeight());
+					System.out.println("Odd ball is Ball "+ groupC.getBalls()[1].getIndex()+" weighing "+groupC.getBalls()[1].getWeight());
 				}
 				else {
 					//Can assume odd ball is 9, because it did not balance with more than one ball.
-					System.out.println("Odd ball is "+ groupC.getBalls()[0].getIndex()+" weighing "+groupC.getBalls()[0].getWeight());
+					System.out.println("Odd ball is Ball "+ groupC.getBalls()[0].getIndex()+" weighing "+groupC.getBalls()[0].getWeight());
 				}
 				
 			}
@@ -82,10 +128,8 @@ public class Main {
 			bSum+=b.getBalls()[i].getWeight();
 		}
 				
-		
-		//First scale
 		if(aSum>bSum) {
-
+			//First scale
 			if(a.getPreviousState()==null && b.getPreviousState()==null) {
 				a.setPreviousState("down");
 				b.setPreviousState("up");
@@ -97,6 +141,17 @@ public class Main {
 				b.setPreviousState(b.getCurrentState());
 				a.setCurrentState("down");
 				b.setCurrentState("up");
+			}
+			if(!a.getPreviousState().equalsIgnoreCase(a.getCurrentState())) {
+				for(int i=0; i<groupSize; i++) {
+					a.getBalls()[i].setStateChanged(true);
+				}
+			}
+
+			if(!b.getPreviousState().equalsIgnoreCase(b.getCurrentState())) {
+				for(int i=0; i<groupSize; i++) {
+					b.getBalls()[i].setStateChanged(true);
+				}
 			}
 			return false;
 		}
@@ -113,10 +168,20 @@ public class Main {
 				a.setCurrentState("up");
 				b.setCurrentState("down");
 			}
+			if(!a.getPreviousState().equalsIgnoreCase(a.getCurrentState())) {
+				for(int i=0; i<groupSize; i++) {
+					a.getBalls()[i].setStateChanged(true);
+				}
+			}
+
+			if(!b.getPreviousState().equalsIgnoreCase(b.getCurrentState())) {
+				for(int i=0; i<groupSize; i++) {
+					b.getBalls()[i].setStateChanged(true);
+				}
+			}
 			return false;
 		}
 		else {
-
 			if(a.getPreviousState()==null && b.getPreviousState()==null) {
 				a.setPreviousState("balanced");
 				b.setPreviousState("balanced");
