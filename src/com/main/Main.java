@@ -7,7 +7,7 @@ public class Main {
 	static boolean balanced = false;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int oddIndex = 5;
+		int oddIndex = 4;
 		BallGroup aNew = new BallGroup("aNew");
 		BallGroup bNew = new BallGroup("bNew");
 		
@@ -64,7 +64,39 @@ public class Main {
 			}
 			
 			else {
+				//If not balanced, will remove Ball 6 and sit out Ball 7.
+				//Retain Balls 2, 3, 8, 4
+				Ball ball7 = aNew.getBalls()[1];
+				BallGroup temp = new BallGroup("temp");
+				temp.setBalls(new Ball[4]);
+				temp.getBalls()[0] = aNew.getBalls()[0];
+				temp.getBalls()[1] = aNew.getBalls()[2];
+				temp.getBalls()[2] = bNew.getBalls()[1];
+				temp.getBalls()[3] = bNew.getBalls()[2];
 				
+				//Move Balls 2 and 3 to A. Move Balls 8 and 4 to B.
+				aNew.setBalls(new Ball[2]);
+				bNew.setBalls(new Ball[2]);
+				
+				aNew.getBalls()[0] = temp.getBalls()[0];
+				aNew.getBalls()[1] = temp.getBalls()[1];
+				bNew.getBalls()[0] = temp.getBalls()[2];
+				bNew.getBalls()[1] = temp.getBalls()[3];
+				
+				//3rd scale in this scenario.
+				balanced = balance(aNew, bNew, 2);
+				
+				if(balanced) {
+					//7 is the odd ball.
+					System.out.println("Odd ball is Ball "+ ball7.getIndex()+" weighing "+ball7.getWeight());
+				}
+				
+				else {
+					System.out.println(aNew.getBalls()[0].isStateChanged());
+					System.out.println(aNew.getBalls()[1].isStateChanged());
+					System.out.println(bNew.getBalls()[0].isStateChanged());
+					System.out.println(bNew.getBalls()[1].isStateChanged());
+				}
 			}
 			
 		}
