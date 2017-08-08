@@ -161,71 +161,21 @@ public class Main {
 		}
 				
 		if(aSum>bSum) {
-			//First scale
-			if(a.getPreviousState()==null && b.getPreviousState()==null) {
-				a.setPreviousState("down");
-				b.setPreviousState("up");
-				a.setCurrentState("down");
-				b.setCurrentState("up");
-			}
-			else {
-				a.setPreviousState(a.getCurrentState());
-				b.setPreviousState(b.getCurrentState());
-				a.setCurrentState("down");
-				b.setCurrentState("up");
-			}
-			if(!a.getPreviousState().equalsIgnoreCase(a.getCurrentState())) {
-				for(int i=0; i<groupSize; i++) {
-					a.getBalls()[i].setStateChanged(true);
-				}
-			}
-
-			if(!b.getPreviousState().equalsIgnoreCase(b.getCurrentState())) {
-				for(int i=0; i<groupSize; i++) {
-					b.getBalls()[i].setStateChanged(true);
-				}
+			if(a.getBalls()[0].getOriginalState()==null) {
+				initOriginalState(a, "down");
+				initOriginalState(b, "up");
+				
 			}
 			return false;
 		}
 		else if(aSum<bSum) {
-			if(a.getPreviousState()==null && b.getPreviousState()==null) {
-				a.setPreviousState("up");
-				b.setPreviousState("down");
-				a.setCurrentState("up");
-				b.setCurrentState("down");
-			}
-			else {
-				a.setPreviousState(a.getCurrentState());
-				b.setPreviousState(b.getCurrentState());
-				a.setCurrentState("up");
-				b.setCurrentState("down");
-			}
-			if(!a.getPreviousState().equalsIgnoreCase(a.getCurrentState())) {
-				for(int i=0; i<groupSize; i++) {
-					a.getBalls()[i].setStateChanged(true);
-				}
-			}
-
-			if(!b.getPreviousState().equalsIgnoreCase(b.getCurrentState())) {
-				for(int i=0; i<groupSize; i++) {
-					b.getBalls()[i].setStateChanged(true);
-				}
+			if(a.getBalls()[0].getOriginalState()==null) {
+				initOriginalState(a, "up");
+				initOriginalState(b, "down");
 			}
 			return false;
 		}
 		else {
-			if(a.getPreviousState()==null && b.getPreviousState()==null) {
-				a.setPreviousState("balanced");
-				b.setPreviousState("balanced");
-				a.setCurrentState("balanced");
-				b.setCurrentState("balanced");
-			}
-			else {
-				a.setPreviousState(a.getCurrentState());
-				b.setPreviousState(b.getCurrentState());
-				a.setCurrentState("balanced");
-				b.setCurrentState("balanced");
-			}
 			return aSum==bSum;
 		}
 	}
@@ -240,5 +190,15 @@ public class Main {
 		else if(oddIndex>=9 && oddIndex<=12) {
 			BallGroup.setOddIndex(groupC, oddIndex);	
 		}
+	}
+	
+	public static void initOriginalState(BallGroup ballGroup, String state) {
+		for(int i=0; i<ballGroup.getBalls().length; i++) {
+			ballGroup.getBalls()[i].setOriginalState(state);
+		}	
+	}
+	
+	public static void changeStates(BallGroup ballGroup, String state) {
+		
 	}
 }

@@ -3,8 +3,6 @@ package com.main;
 public class BallGroup {
 
 	private Ball[] balls;
-	private String currentState;
-	private String previousState;
 	private String group;
 
 	public BallGroup(String group) {
@@ -16,25 +14,11 @@ public class BallGroup {
 		return balls;
 	}
 	
-	public String getCurrentState() {
-		return currentState;
-	}
-
-	public void setCurrentState(String currentState) {
-		this.currentState = currentState;
-	}
 	
 	public void setBalls(Ball[] balls) {
 		this.balls = balls;
 	}
 
-	public String getPreviousState() {
-		return previousState;
-	}
-
-	public void setPreviousState(String previousState) {
-		this.previousState = previousState;
-	}
 	
 	public void init() {
 		if("a".equalsIgnoreCase(this.group)) {
